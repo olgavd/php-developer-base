@@ -1,0 +1,19 @@
+{
+    "name": "dluss/php-developer-base",
+    "autoload": {
+        "psr-4": {
+            "App\\": "base-final/src"
+        }
+    },
+    "authors": [
+        {
+            "name": "olga",
+            "email": "dlusskayaov@gmail.com"
+        }
+    ],
+    "require": {
+      "ext-pdo": "*",
+        "phpmailer/phpmailer": "^7.0",
+      "ext-posix": "*"
+    }
+}

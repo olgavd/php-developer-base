@@ -1,0 +1,60 @@
+services:
+  php:
+    build: docker/php
+    ports:
+      - "8080:80"
+    user: "${UID}:${GID}"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/config/uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    depends_on:
+      - db
+    networks:
+      - network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      DB_HOST: db
+      TZ: Europe/Minsk
+    working_dir: /var/www/html
+    restart: always
+    container_name: php
+
+  db:
+    image: mysql:latest
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cloud_storage
+      TZ: Europe/Minsk
+    networks:
+      - network
+    container_name: mysql
+    restart: always
+    ports:
+      - "3366:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    networks:
+      - network
+    container_name: phpmyadmin
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DB: cloud_storage
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      TZ: Europe/Minsk
+    depends_on:
+      - db
+
+volumes:
+  db:
+
+networks:
+  network:
